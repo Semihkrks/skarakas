@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/animations/scroll-reveal";
 import { SpotlightCard } from "@/components/animations/tilt-card";
-import { Calendar, Clock, ArrowRight, BookOpen, PenTool, Loader2 } from "lucide-react";
+import { Calendar, Clock, ArrowRight, BookOpen, PenTool } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
@@ -61,11 +61,35 @@ export function BlogSection() {
 
         {/* Blog Grid */}
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="overflow-hidden rounded-2xl">
+                <div className="h-48 w-full animate-pulse bg-[var(--muted)]" />
+                <div className="space-y-3 p-6">
+                  <div className="flex gap-4">
+                    <div className="h-3 w-24 animate-pulse rounded bg-[var(--muted)]" />
+                    <div className="h-3 w-16 animate-pulse rounded bg-[var(--muted)]" />
+                  </div>
+                  <div className="h-5 w-3/4 animate-pulse rounded bg-[var(--muted)]" />
+                  <div className="h-4 w-full animate-pulse rounded bg-[var(--muted)]" />
+                  <div className="h-4 w-20 animate-pulse rounded bg-[var(--muted)]" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : blogPosts.length === 0 ? (
-          <div className="text-center py-16 text-[var(--muted-foreground)]">Henüz blog yazısı yok.</div>
+          <ScrollReveal className="mx-auto max-w-md text-center">
+            <div className="glass-card rounded-2xl p-10">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500/10 to-accent-500/10">
+                <PenTool className="h-8 w-8 text-primary-500" />
+              </div>
+              <h3 className="mb-2 text-lg font-bold">Yakında Burada!</h3>
+              <p className="text-sm text-[var(--muted-foreground)]">
+                Blog yazıları hazırlanıyor. Yazılım, tasarım ve teknoloji
+                hakkında deneyimlerimi yakında burada paylaşacağım.
+              </p>
+            </div>
+          </ScrollReveal>
         ) : (
         <StaggerContainer staggerDelay={0.15} className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {blogPosts.map((post) => (

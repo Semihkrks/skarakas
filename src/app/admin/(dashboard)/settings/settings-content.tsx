@@ -1,42 +1,113 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Save, Globe, Mail, Github, Linkedin, Twitter } from "lucide-react";
-import { useState } from "react";
+import { Save, Globe, Mail, Github, Linkedin, Twitter, Instagram, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-export function AdminSettingsContent() {
-  const [settings, setSettings] = useState({
-    siteTitle: "Semih Karakaş",
-    siteDescription: "Full-Stack Yazılım Geliştirici",
-    email: "semih@skarakas.com",
-    github: "https://github.com/skarakas",
-    linkedin: "https://linkedin.com/in/skarakas",
-    twitter: "https://twitter.com/skarakas",
-  });
+interface SettingsData {
+  siteTitle: string;
+  siteDescription: string;
+  email: string;
+  github: string;
+  linkedin: string;
+  twitter: string;
+  instagram: string;
+}
 
-  const handleSave = () => {
-    // In production, save to Supabase
-    toast.success("Ayarlar kaydedildi!");
+const defaultSettings: SettingsData = {
+  siteTitle: "",
+  siteDescription: "",
+  email: "",
+  github: "",
+  linkedin: "",
+  twitter: "",
+  instagram: "",
+};
+
+export function AdminSettingsContent() {
+  const [settings, setSettings] = useState<SettingsData>(defaultSettings);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        setSettings({
+          siteTitle: data.siteTitle || "",
+          siteDescription: data.siteDescription || "",
+          email: data.email || "",
+          github: data.github || "",
+          linkedin: data.linkedin || "",
+          twitter: data.twitter || "",
+          instagram: data.instagram || "",
+        });
+      })
+      .catch(() => toast.error("Ayarlar yüklenemedi"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      if (res.ok) {
+        toast.success("Ayarlar kaydedildi!");
+      } else {
+        toast.error("Kaydetme hatası");
+      }
+    } catch {
+      toast.error("Bağlantı hatası");
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <div className="h-9 w-32 animate-pulse rounded-xl bg-[var(--muted)]" />
+            <div className="mt-2 h-5 w-48 animate-pulse rounded-lg bg-[var(--muted)]" />
+          </div>
+          <div className="h-11 w-28 animate-pulse rounded-xl bg-[var(--muted)]" />
+        </div>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="h-80 animate-pulse rounded-2xl bg-[var(--muted)]" />
+          <div className="h-80 animate-pulse rounded-2xl bg-[var(--muted)]" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Ayarlar</h1>
-          <p className="mt-1 text-[var(--muted-foreground)]">
+          <h1 className="text-2xl font-bold sm:text-3xl">Ayarlar</h1>
+          <p className="mt-1 text-sm text-[var(--muted-foreground)]">
             Site ayarlarını düzenleyin.
           </p>
         </div>
         <motion.button
           onClick={handleSave}
-          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary-500 to-accent-500  px-5 py-3 text-sm font-medium text-white shadow-lg shadow-primary-500/25"
+          disabled={saving}
+          className="flex items-center gap-2 self-start rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 px-5 py-3 text-sm font-medium text-white shadow-lg shadow-primary-500/25 disabled:opacity-50"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Save className="h-4 w-4" />
-          Kaydet
+          {saving ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Save className="h-4 w-4" />
+          )}
+          {saving ? "Kaydediliyor..." : "Kaydet"}
         </motion.button>
       </div>
 
@@ -53,21 +124,32 @@ export function AdminSettingsContent() {
           </h2>
           <div className="space-y-5">
             <div>
-              <label className="mb-2 block text-sm font-medium">Site Başlığı</label>
+              <label className="mb-2 block text-sm font-medium">
+                Site Başlığı
+              </label>
               <input
                 type="text"
                 value={settings.siteTitle}
-                onChange={(e) => setSettings({ ...settings, siteTitle: e.target.value })}
-                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)]  px-4 py-3 text-sm focus:border-primary-500 focus:outline-none  focus:ring-2 focus:ring-primary-500/20"
+                onChange={(e) =>
+                  setSettings({ ...settings, siteTitle: e.target.value })
+                }
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium">Site Açıklaması</label>
+              <label className="mb-2 block text-sm font-medium">
+                Site Açıklaması
+              </label>
               <textarea
                 value={settings.siteDescription}
-                onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })}
+                onChange={(e) =>
+                  setSettings({
+                    ...settings,
+                    siteDescription: e.target.value,
+                  })
+                }
                 rows={3}
-                className="w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--background)]  px-4 py-3 text-sm focus:border-primary-500 focus:outline-none  focus:ring-2 focus:ring-primary-500/20"
+                className="w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
@@ -78,8 +160,10 @@ export function AdminSettingsContent() {
               <input
                 type="email"
                 value={settings.email}
-                onChange={(e) => setSettings({ ...settings, email: e.target.value })}
-                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)]  px-4 py-3 text-sm focus:border-primary-500 focus:outline-none  focus:ring-2 focus:ring-primary-500/20"
+                onChange={(e) =>
+                  setSettings({ ...settings, email: e.target.value })
+                }
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
           </div>
@@ -101,8 +185,11 @@ export function AdminSettingsContent() {
               <input
                 type="url"
                 value={settings.github}
-                onChange={(e) => setSettings({ ...settings, github: e.target.value })}
-                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)]  px-4 py-3 text-sm focus:border-primary-500 focus:outline-none  focus:ring-2 focus:ring-primary-500/20"
+                onChange={(e) =>
+                  setSettings({ ...settings, github: e.target.value })
+                }
+                placeholder="https://github.com/username"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
@@ -112,8 +199,11 @@ export function AdminSettingsContent() {
               <input
                 type="url"
                 value={settings.linkedin}
-                onChange={(e) => setSettings({ ...settings, linkedin: e.target.value })}
-                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)]  px-4 py-3 text-sm focus:border-primary-500 focus:outline-none  focus:ring-2 focus:ring-primary-500/20"
+                onChange={(e) =>
+                  setSettings({ ...settings, linkedin: e.target.value })
+                }
+                placeholder="https://linkedin.com/in/username"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
             <div>
@@ -123,8 +213,25 @@ export function AdminSettingsContent() {
               <input
                 type="url"
                 value={settings.twitter}
-                onChange={(e) => setSettings({ ...settings, twitter: e.target.value })}
-                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)]  px-4 py-3 text-sm focus:border-primary-500 focus:outline-none  focus:ring-2 focus:ring-primary-500/20"
+                onChange={(e) =>
+                  setSettings({ ...settings, twitter: e.target.value })
+                }
+                placeholder="https://twitter.com/username"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+              />
+            </div>
+            <div>
+              <label className="mb-2 flex items-center gap-1.5 text-sm font-medium">
+                <Instagram className="h-4 w-4" /> Instagram
+              </label>
+              <input
+                type="url"
+                value={settings.instagram}
+                onChange={(e) =>
+                  setSettings({ ...settings, instagram: e.target.value })
+                }
+                placeholder="https://instagram.com/username"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
           </div>

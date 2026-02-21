@@ -37,6 +37,18 @@ export interface Message {
   subject: string | null;
   message: string;
   read: boolean;
+  replied_at: string | null;
+  reply_text: string | null;
+  created_at: string;
+}
+
+export interface PageView {
+  id: string;
+  path: string;
+  referrer: string | null;
+  user_agent: string | null;
+  ip_hash: string | null;
+  country: string | null;
   created_at: string;
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -16,9 +16,12 @@ const navLinks = [
   { label: "İletişim", href: "#contact" },
 ];
 
+const sectionIds = ["hero", "about", "services", "projects", "blog", "contact"];
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -34,6 +37,27 @@ export function Navbar() {
   useMotionValueEvent(scrollY, "change", (y) => {
     setIsScrolled(y > 10);
   });
+
+  // Scroll spy — detect which section is currently in view
+  const handleScroll = useCallback(() => {
+    if (!isHome) return;
+    const scrollPosition = window.scrollY + 200;
+
+    for (let i = sectionIds.length - 1; i >= 0; i--) {
+      const section = document.getElementById(sectionIds[i]);
+      if (section && section.offsetTop <= scrollPosition) {
+        setActiveSection(sectionIds[i]);
+        break;
+      }
+    }
+  }, [isHome]);
+
+  useEffect(() => {
+    if (!isHome) return;
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHome, handleScroll]);
 
   // Disable scrolling when mobile menu is open
   useEffect(() => {
@@ -53,6 +77,14 @@ export function Navbar() {
         }
       }
     }
+  };
+
+  const isLinkActive = (href: string) => {
+    if (!isHome) return false;
+    if (href.startsWith("#")) {
+      return activeSection === href.slice(1);
+    }
+    return false;
   };
 
   return (
@@ -97,7 +129,12 @@ export function Navbar() {
           {/* Desktop Nav Links */}
           <div className="relative z-10 hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <NavLink key={link.href} href={link.href} onClick={() => handleNavClick(link.href)}>
+              <NavLink
+                key={link.href}
+                href={link.href}
+                active={isLinkActive(link.href)}
+                onClick={() => handleNavClick(link.href)}
+              >
                 {link.label}
               </NavLink>
             ))}
@@ -171,11 +208,14 @@ export function Navbar() {
                       e.preventDefault();
                       handleNavClick(link.href);
                     }}
-                    className="flex items-center gap-3 rounded-2xl px-4 py-3 text-lg font-medium transition-colors hover:bg-[var(--muted)]"
+                    className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-lg font-medium transition-colors hover:bg-[var(--muted)] ${isLinkActive(link.href) ? "text-primary-500 bg-primary-500/5" : ""}`}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.05 * i }}
                   >
+                    {isLinkActive(link.href) && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />
+                    )}
                     {link.label}
                   </motion.a>
                 ))}
@@ -205,10 +245,12 @@ export function Navbar() {
 function NavLink({
   href,
   children,
+  active,
   onClick,
 }: {
   href: string;
   children: React.ReactNode;
+  active?: boolean;
   onClick?: () => void;
 }) {
   return (
@@ -218,18 +260,27 @@ function NavLink({
         if (href.startsWith("#")) e.preventDefault();
         onClick?.();
       }}
-      className="group relative px-4 py-2 text-sm font-medium text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
+      className={`group relative px-4 py-2 text-sm font-medium transition-colors ${active ? "text-[var(--foreground)]" : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"}`}
       whileHover="hover"
     >
       {children}
-      <motion.span
-        className="absolute bottom-0 left-1/2 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"
-        variants={{
-          hover: { width: "60%", x: "-50%", opacity: 1 },
-        }}
-        initial={{ width: 0, x: "-50%", opacity: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      />
+      {/* Active indicator */}
+      {active ? (
+        <motion.span
+          layoutId="navActiveIndicator"
+          className="absolute bottom-0 left-1/2 h-0.5 w-[60%] -translate-x-1/2 rounded-full bg-gradient-to-r from-primary-500 to-accent-500"
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        />
+      ) : (
+        <motion.span
+          className="absolute bottom-0 left-1/2 h-0.5 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"
+          variants={{
+            hover: { width: "60%", x: "-50%", opacity: 1 },
+          }}
+          initial={{ width: 0, x: "-50%", opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        />
+      )}
     </motion.a>
   );
 }

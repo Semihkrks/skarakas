@@ -83,3 +83,45 @@ CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_status ON blog_posts(status);
 CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(featured);
 CREATE INDEX IF NOT EXISTS idx_messages_read ON messages(read);
+
+-- =============================================
+-- MIGRATION: Page views tracking
+-- =============================================
+CREATE TABLE IF NOT EXISTS page_views (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  path TEXT NOT NULL,
+  referrer TEXT,
+  user_agent TEXT,
+  ip_hash TEXT,
+  country TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE page_views ENABLE ROW LEVEL SECURITY;
+
+-- Public can insert page views (tracking), admin can do everything
+CREATE POLICY "Public can insert page_views" ON page_views FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public can view page_views" ON page_views FOR SELECT USING (true);
+CREATE POLICY "Admin full access page_views" ON page_views FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE INDEX IF NOT EXISTS idx_page_views_path ON page_views(path);
+CREATE INDEX IF NOT EXISTS idx_page_views_created_at ON page_views(created_at);
+
+-- =============================================
+-- MIGRATION: Message reply fields
+-- =============================================
+ALTER TABLE messages ADD COLUMN IF NOT EXISTS replied_at TIMESTAMPTZ;
+ALTER TABLE messages ADD COLUMN IF NOT EXISTS reply_text TEXT;
+
+-- =============================================
+-- MIGRATION: Seed default settings
+-- =============================================
+INSERT INTO settings (key, value) VALUES
+  ('siteTitle', 'Semih Karakaş'),
+  ('siteDescription', 'Full-Stack Yazılım Geliştirici'),
+  ('email', 'semih@skarakas.com'),
+  ('github', 'https://github.com/ssemihkarakass'),
+  ('linkedin', ''),
+  ('twitter', ''),
+  ('instagram', '')
+ON CONFLICT (key) DO NOTHING;

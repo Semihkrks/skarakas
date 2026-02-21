@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, useMotionValue, AnimatePresence } from "framer-motion";
-import { ChevronDown, Terminal, Braces, Hash, Database, GitBranch, Cpu, Wifi } from "lucide-react";
+import { ChevronDown, Terminal, Braces, Hash, Database, GitBranch, Cpu, Wifi, ArrowRight, MessageSquare } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { ParticleField } from "@/components/animations/particle-field";
 
@@ -225,16 +225,58 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.7 }}
         >
-          Modern web teknolojileri ile yüksek performanslı, estetik ve 
+          Modern web teknolojileri ile yüksek performanslı, estetik ve
           kullanıcı deneyimi odaklı dijital ürünler tasarlıyor ve geliştiriyorum.
         </motion.p>
 
-        {/* Tech stack pills */}
+        {/* CTA Buttons */}
         <motion.div
-          className="mt-10 flex flex-wrap items-center justify-center gap-3"
+          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.9, duration: 0.7 }}
+          transition={{ delay: 1.7, duration: 0.7 }}
+        >
+          <motion.a
+            href="#projects"
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="group relative flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary-500 to-accent-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-primary-500/25 transition-shadow hover:shadow-xl hover:shadow-primary-500/35"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              initial={{ x: "-100%" }}
+              whileHover={{ x: "100%" }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+            />
+            <span className="relative z-10">Projelerimi Gör</span>
+            <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </motion.a>
+
+          <motion.a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="flex items-center gap-2 rounded-full glass px-8 py-4 text-base font-semibold transition-all hover:shadow-lg"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            İletişime Geç
+            <MessageSquare className="h-4 w-4" />
+          </motion.a>
+        </motion.div>
+
+        {/* Tech stack pills */}
+        <motion.div
+          className="mt-8 flex flex-wrap items-center justify-center gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.1, duration: 0.7 }}
         >
           {["Next.js", "TypeScript", "React", "Node.js", "Tailwind", "Supabase"].map((tech, i) => (
             <motion.span
@@ -242,7 +284,7 @@ export function HeroSection() {
               className="rounded-full glass-subtle px-4 py-2 text-xs font-medium text-[var(--muted-foreground)] transition-colors hover:text-primary-500 cursor-default"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 2 + i * 0.08, duration: 0.4 }}
+              transition={{ delay: 2.2 + i * 0.08, duration: 0.4 }}
               whileHover={{ scale: 1.05, y: -2 }}
             >
               {tech}
