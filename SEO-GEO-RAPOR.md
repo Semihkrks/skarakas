@@ -59,6 +59,27 @@ Next.js file convention sayesinde icon/og-image link etiketleri otomatik enjekte
 5. ✅ **Resend lazy init** — `contact` ve `reply` route'ları handler içinde init ediyor; build artık RESEND_API_KEY istemiyor.
 6. ✅ **Portfolyo siteleri GEO'ya eklendi** — ustakur.com, nassevent.com, netvora.tr, sonvera.com.tr, kavzakimya.com, cataloglugeziturizm.com.tr → Person schema `workExample` + llms.txt.
 
+## 🔍 İkinci Tarama — Hata/Eksik Denetimi (2026-07-03)
+
+### Düzeltildi ve deploy edildi
+| Sorun | Düzeltme |
+|---|---|
+| Olmayan blog yazısı HTTP 200 dönüyordu (soft 404 — Google indeksleme sorunu) | `notFound()` ile gerçek 404; canlıda doğrulandı |
+| Site geneli 404 sayfası İngilizce default Next sayfasıydı | Türkçe, navbar/footer'lı özel `not-found.tsx` |
+| `next.config.ts`'de `images.remotePatterns` yoktu — admin panelden proje görseli (thumbnail) eklenince site **çökecekti** | Supabase storage hostları eklendi |
+| Blog yazılarında `**kalın**` metin siliniyordu, `kod`, `###` başlık ve liste işaretleri render edilmiyordu | Inline renderer eklendi |
+| Navbar'da logo (istek üzerine) | Gradient "SK" kutusuna geri alındı; logo footer + favicon + OG'de duruyor |
+
+### Senin kararını bekleyen bulgular
+1. **Projeler bölümü zayıf** — DB'deki 6 proje jenerik/demo içerik ("E-Ticaret Platformu", "Sağlık Takip Uygulaması"...) ve **hiçbirinde live_url yok** → kartlarda tıklanacak link çıkmıyor. Gerçek işlerin (ustakur.com, nassevent.com, netvora.tr, sonvera.com.tr, kavzakimya.com, cataloglugeziturizm.com.tr) admin panelden `live_url` ile eklenmeli. Portfolyo sitesinde gerçek referans görünmemesi en büyük içerik eksiği.
+2. **Telefon placeholder** — İletişim bölümünde "+90 (5XX) XXX XX XX" yazıyor. Gerçek numara koy ya da satırı kaldır (sahte görünüm güven kırıyor).
+3. **Sosyal hesaplar doğrulanmalı** — `x.com/skarakas` ve `linkedin.com/in/skarakas` hesapları mevcut ama GitHub kullanıcı adın "ssemihkarakass". Bu handle'lar başkasına aitse footer/iletişim/JSON-LD yanlış kişiye link veriyor. Kontrol et, gerekirse düzeltelim.
+4. **About istatistikleri hardcoded** — "5+ Yıl Deneyim, 50+ Tamamlanan Proje, 30+ Mutlu Müşteri". Doğruysa sorun yok; değilse güncelle.
+5. **E-posta kutusu** — skarakas.com MX kaydı Google'a bakıyor; `semih@skarakas.com` kutusunun gerçekten kurulu olduğunu doğrula (iletişim formu bildirimleri + site üzerindeki mailto buraya bağlı).
+
+### Temiz çıkanlar
+Console hatasız · Network istekleri hatasız (Supabase 200) · Performans çok iyi (TTFB 74ms, load 224ms) · Tema geçişi çalışıyor · Mobil görünüm düzgün · Blog 6 yazıyla DB'den geliyor · Kategori filtreleri dinamik · Admin sayfaları noindex.
+
 ## 📋 Orta Vadeli Öneriler
 
 ### SEO
