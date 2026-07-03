@@ -2,6 +2,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { BlogPostContent } from "./blog-post-content";
 import { createClient } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 type Params = Promise<{ slug: string }>;
@@ -49,18 +50,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
     .single();
 
   if (!post) {
-    return (
-      <>
-        <Navbar />
-        <main className="flex min-h-screen items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold">404</h1>
-            <p className="mt-2 text-[var(--muted-foreground)]">Bu yazı bulunamadı.</p>
-          </div>
-        </main>
-        <Footer />
-      </>
-    );
+    notFound();
   }
 
   const articleJsonLd = {

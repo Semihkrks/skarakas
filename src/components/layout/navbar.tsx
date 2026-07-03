@@ -5,7 +5,6 @@ import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence }
 import { Menu, X, ArrowRight } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
@@ -112,18 +111,11 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="relative z-10 flex items-center gap-2 group">
             <motion.div
-              className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white ring-1 ring-[var(--border)]"
+              className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 font-bold text-white text-sm"
               whileHover={{ scale: 1.05, rotate: -3 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Image
-                src="/logo.png"
-                alt="Semih Karakaş — SK logo"
-                width={26}
-                height={21}
-                priority
-                className="object-contain"
-              />
+              SK
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary-400 to-accent-400 opacity-0 blur-lg transition-opacity group-hover:opacity-60" />
             </motion.div>
             {!isScrolled && (

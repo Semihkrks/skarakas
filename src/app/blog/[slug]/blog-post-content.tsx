@@ -16,6 +16,27 @@ interface BlogPost {
   content: string;
 }
 
+/* Render **bold** and `code` inline markdown as real elements */
+function renderInline(text: string): React.ReactNode[] {
+  return text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-semibold text-[var(--foreground)]">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
+      return (
+        <code key={i} className="rounded bg-[var(--muted)] px-1.5 py-0.5 text-sm">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
+}
+
 export function BlogPostContent({ post }: { post: BlogPost }) {
   const articleRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -77,6 +98,13 @@ export function BlogPostContent({ post }: { post: BlogPost }) {
         <ScrollReveal>
           <article className="prose prose-lg dark:prose-invert max-w-none  prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-p:text-[var(--muted-foreground)] prose-p:leading-relaxed prose-strong:text-[var(--foreground)] prose-a:text-primary-500 prose-a:no-underline hover:prose-a:underline prose-li:text-[var(--muted-foreground)] prose-code:rounded prose-code:bg-[var(--muted)] prose-code:px-1.5 prose-code:py-0.5">
             {post.content.split("\n\n").map((paragraph, i) => {
+              if (paragraph.startsWith("### ")) {
+                return (
+                  <h3 key={i} className="text-xl font-bold mt-8 mb-3 text-[var(--foreground)]">
+                    {paragraph.replace("### ", "")}
+                  </h3>
+                );
+              }
               if (paragraph.startsWith("## ")) {
                 return (
                   <h2 key={i} className="text-2xl font-bold mt-12 mb-4 text-[var(--foreground)]">
@@ -87,10 +115,10 @@ export function BlogPostContent({ post }: { post: BlogPost }) {
               if (paragraph.startsWith("- ")) {
                 const items = paragraph.split("\n").filter((l) => l.startsWith("- "));
                 return (
-                  <ul key={i} className="my-4 space-y-2">
+                  <ul key={i} className="my-4 list-disc space-y-2 pl-6">
                     {items.map((item, j) => (
                       <li key={j} className="text-[var(--muted-foreground)]">
-                        {item.replace("- ", "").replace(/\*\*(.*?)\*\*/g, "$1")}
+                        {renderInline(item.replace("- ", ""))}
                       </li>
                     ))}
                   </ul>
@@ -98,7 +126,7 @@ export function BlogPostContent({ post }: { post: BlogPost }) {
               }
               return (
                 <p key={i} className="mb-4 text-[var(--muted-foreground)] leading-relaxed">
-                  {paragraph.replace(/\*\*(.*?)\*\*/g, "$1")}
+                  {renderInline(paragraph)}
                 </p>
               );
             })}
