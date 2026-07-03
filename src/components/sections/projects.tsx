@@ -21,80 +21,78 @@ interface Project {
   featured: boolean;
 }
 
-const categories = ["Tümü", "Web", "Mobil", "API", "UI/UX"];
-
-// Demo projects shown when database is empty
+// Real portfolio work — also shown as fallback when the database is empty
 const demoProjects: Project[] = [
   {
-    id: "demo-1",
-    title: "E-Ticaret Platformu",
-    description: "Next.js ve Supabase ile geliştirilen modern, yüksek performanslı full-stack e-ticaret uygulaması. Gerçek zamanlı stok takibi ve ödeme entegrasyonu.",
-    category: "Web",
-    tags: ["Next.js", "Supabase", "Stripe", "Tailwind"],
-    thumbnail_url: null,
-    gradient: "from-teal-500 to-cyan-500",
-    live_url: "#",
-    github_url: "#",
-    featured: true,
-  },
-  {
-    id: "demo-2",
-    title: "Görev Yönetim Uygulaması",
-    description: "React Native ile geliştirilen cross-platform mobil uygulama. Sürükle-bırak, gerçek zamanlı senkronizasyon ve offline destek.",
-    category: "Mobil",
-    tags: ["React Native", "Expo", "Firebase"],
-    thumbnail_url: null,
-    gradient: "from-violet-500 to-purple-500",
-    live_url: "#",
-    github_url: "#",
-    featured: false,
-  },
-  {
-    id: "demo-3",
-    title: "RESTful Mikroservis API",
-    description: "Node.js ve PostgreSQL ile ölçeklenebilir mikroservis mimarisi. JWT kimlik doğrulama, rate limiting ve Swagger dokümantasyonu.",
-    category: "API",
-    tags: ["Node.js", "PostgreSQL", "Docker", "Redis"],
-    thumbnail_url: null,
-    gradient: "from-emerald-500 to-teal-500",
-    live_url: null,
-    github_url: "#",
-    featured: false,
-  },
-  {
-    id: "demo-4",
-    title: "SaaS Dashboard",
-    description: "Analitik ve veri görselleştirme odaklı yönetim paneli. Gerçek zamanlı grafikler, raporlama ve kullanıcı yönetimi.",
-    category: "Web",
-    tags: ["React", "TypeScript", "Recharts", "Tailwind"],
+    id: "real-1",
+    title: "Sonvera 2.0",
+    description: "Nilvera entegrasyonlu e-fatura yönetim platformu. Çoklu hesap yönetimi, Excel export ve güvenli bulut altyapısı ile fatura süreçlerini tek panelden yönetir.",
+    category: "Web Uygulaması",
+    tags: ["SaaS", "E-Fatura", "Entegrasyon", "Bulut"],
     thumbnail_url: null,
     gradient: "from-blue-500 to-indigo-500",
-    live_url: "#",
-    github_url: "#",
+    live_url: "https://sonvera.com.tr",
+    github_url: null,
     featured: true,
   },
   {
-    id: "demo-5",
-    title: "Tasarım Sistemi",
-    description: "Kapsamlı UI komponent kütüphanesi. Erişilebilirlik standartlarına uygun, tema desteği ve Storybook dokümantasyonu.",
-    category: "UI/UX",
-    tags: ["Figma", "Storybook", "React", "A11y"],
+    id: "real-2",
+    title: "Ustakur",
+    description: "İstanbul'da mobilya montaj hizmeti için SEO odaklı yerel hizmet sitesi. Hizmet sayfaları, yorum sistemi ve yerel arama görünürlüğü ile müşteri kazanımı sağlar.",
+    category: "Kurumsal Site",
+    tags: ["SEO", "Yerel Hizmet", "Kurumsal"],
     thumbnail_url: null,
     gradient: "from-amber-500 to-orange-500",
-    live_url: "#",
+    live_url: "https://ustakur.com",
+    github_url: null,
+    featured: true,
+  },
+  {
+    id: "real-3",
+    title: "NASS Event",
+    description: "Event, müzik & film prodüksiyonu ve grafik tasarım ajansı için portfolyo sitesi. Hizmet vitrini, medya galerisi ve marka odaklı modern tasarım.",
+    category: "Kurumsal Site",
+    tags: ["Ajans", "Portfolyo", "Tasarım"],
+    thumbnail_url: null,
+    gradient: "from-violet-500 to-purple-500",
+    live_url: "https://nassevent.com",
     github_url: null,
     featured: false,
   },
   {
-    id: "demo-6",
-    title: "Gerçek Zamanlı Chat",
-    description: "WebSocket tabanlı anlık mesajlaşma uygulaması. Dosya paylaşımı, grup sohbetleri ve uçtan uca şifreleme.",
-    category: "Web",
-    tags: ["Next.js", "Socket.io", "Redis", "S3"],
+    id: "real-4",
+    title: "Netvora",
+    description: "Ağ altyapısı, akıllı bina otomasyonu ve saha mühendisliği firması için B2B kurumsal site. Hizmet mimarisi ve teknik içerik yapısıyla kurumsal güven oluşturur.",
+    category: "Kurumsal Site",
+    tags: ["B2B", "Mühendislik", "Kurumsal"],
+    thumbnail_url: null,
+    gradient: "from-teal-500 to-cyan-500",
+    live_url: "https://netvora.tr",
+    github_url: null,
+    featured: false,
+  },
+  {
+    id: "real-5",
+    title: "Kavza Kimya",
+    description: "Endüstriyel ve evsel temizlik kimyasalları üreticisi için ürün kataloglu kurumsal site. Ürün yelpazesi, bayilik başvurusu ve Türkiye geneli dağıtım ağı tanıtımı.",
+    category: "Kurumsal Site",
+    tags: ["Üretici", "Katalog", "B2B"],
+    thumbnail_url: null,
+    gradient: "from-emerald-500 to-teal-500",
+    live_url: "https://kavzakimya.com",
+    github_url: null,
+    featured: false,
+  },
+  {
+    id: "real-6",
+    title: "Çataloğlu Gezi Turizm",
+    description: "Şahinkaya Kanyonu tekne turları için rezervasyon odaklı turizm sitesi. Tur paketleri, galeri ve yerel SEO ile sezonluk müşteri trafiği sağlar.",
+    category: "Kurumsal Site",
+    tags: ["Turizm", "Rezervasyon", "SEO"],
     thumbnail_url: null,
     gradient: "from-rose-500 to-pink-500",
-    live_url: "#",
-    github_url: "#",
+    live_url: "https://cataloglugeziturizm.com.tr",
+    github_url: null,
     featured: false,
   },
 ];
@@ -103,7 +101,6 @@ export function ProjectsSection() {
   const [activeCategory, setActiveCategory] = useState("Tümü");
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [usingDemo, setUsingDemo] = useState(false);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -117,17 +114,17 @@ export function ProjectsSection() {
           setProjects(data);
         } else {
           setProjects(demoProjects);
-          setUsingDemo(true);
         }
       } catch {
         setProjects(demoProjects);
-        setUsingDemo(true);
       } finally {
         setLoading(false);
       }
     }
     fetchProjects();
   }, []);
+
+  const categories = ["Tümü", ...Array.from(new Set(projects.map((p) => p.category).filter(Boolean)))];
 
   const filteredProjects =
     activeCategory === "Tümü"
@@ -263,11 +260,6 @@ export function ProjectsSection() {
                           >
                             <Github className="h-5 w-5" />
                           </motion.a>
-                        )}
-                        {usingDemo && (
-                          <div className="flex h-12 items-center justify-center rounded-full bg-white/20 px-4 text-sm text-white backdrop-blur-sm">
-                            Demo Proje
-                          </div>
                         )}
                       </div>
 

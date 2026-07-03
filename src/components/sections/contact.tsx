@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 const contactInfo = [
   { icon: Mail, label: "E-posta", value: "semih@skarakas.com", href: "mailto:semih@skarakas.com" },
   { icon: MapPin, label: "Konum", value: "Türkiye", href: null },
-  { icon: Phone, label: "Telefon", value: "+90 (5XX) XXX XX XX", href: null },
+  { icon: Phone, label: "Telefon", value: "+90 552 180 46 55", href: "tel:+905521804655" },
 ];
 
 const socialLinks = [

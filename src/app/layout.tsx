@@ -76,7 +76,10 @@ const jsonLd = {
       url: "https://skarakas.com",
       image: "https://skarakas.com/logo.png",
       jobTitle: "Full-Stack Yazılım Geliştirici",
+      description:
+        "5 yılı aşkın deneyime sahip full-stack yazılım geliştirici. React, Next.js, TypeScript ve modern backend teknolojileriyle 50'den fazla proje teslim etti; kurumsal siteler, SaaS platformları ve e-ticaret çözümleri geliştiriyor.",
       email: "mailto:semih@skarakas.com",
+      telephone: "+90-552-180-46-55",
       knowsAbout: ["React", "Next.js", "TypeScript", "Node.js", "Supabase", "Web Geliştirme"],
       workExample: [
         { "@type": "WebSite", name: "Ustakur", url: "https://ustakur.com" },

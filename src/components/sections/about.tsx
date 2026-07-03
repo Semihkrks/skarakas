@@ -123,9 +123,9 @@ export function AboutSection() {
                   Dijital dünyada <span className="text-gradient">iz bırakmak</span> için buradayım
                 </h3>
                 <p className="text-[var(--muted-foreground)] leading-relaxed mb-4">
-                  Yazılım geliştirme tutkumla, performans odaklı ve görsel açıdan etkileyici 
-                  web uygulamaları tasarlıyorum. React, Next.js, TypeScript ve modern backend 
-                  teknolojileriyle uçtan uca çözümler sunuyorum.
+                  5 yılı aşkın profesyonel deneyimimle, performans odaklı ve görsel açıdan
+                  etkileyici web uygulamaları tasarlıyorum. React, Next.js, TypeScript ve
+                  modern backend teknolojileriyle uçtan uca çözümler sunuyorum.
                 </p>
                 <p className="text-[var(--muted-foreground)] leading-relaxed">
                   Her projede temiz kod, ölçeklenebilir mimari ve mükemmel kullanıcı deneyimi 
@@ -301,7 +301,12 @@ function CountUp({ target, delay = 0 }: { target: string; delay?: number }) {
 
   return (
     <div ref={ref} className="text-gradient inline-block">
-      <NumberTicker value={num} suffix={suffix} delay={delay} animate={isInView} />
+      {/* Static value for crawlers/screen readers — animated ticker overwrites
+          its own DOM mid-count, so bots can snapshot a low number otherwise */}
+      <span className="sr-only">{target}</span>
+      <span aria-hidden="true">
+        <NumberTicker value={num} suffix={suffix} delay={delay} animate={isInView} />
+      </span>
     </div>
   );
 }
