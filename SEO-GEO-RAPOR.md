@@ -50,13 +50,14 @@ Next.js file convention sayesinde icon/og-image link etiketleri otomatik enjekte
 
 ---
 
-## ⚠️ Kalan Kritik İşler (deploy sonrası)
+## ⚠️ Kalan Kritik İşler — GÜNCELLEME (2026-07-03)
 
-1. **Deploy et** — düzeltmelerin hiçbiri henüz canlıda değil. Deploy sonrası kontrol: `skarakas.com/robots.txt`, `/sitemap.xml`, `/llms.txt`.
-2. **Google Search Console** — site kaydı yok gibi. Kayıt ol, sitemap.xml gönder. Bing Webmaster Tools'a da ekle (ChatGPT web araması Bing index kullanıyor).
-3. **Blog listesi hardcoded** — `src/app/blog/blog-content.tsx` içinde yazılar sabit dizi; detay sayfası ise Supabase'den çekiyor. Listede olup DB'de olmayan slug → 404. Listeyi de Supabase'den çek (server component yap — şu an client-side, SEO için de daha iyi olur).
-4. **Ana sayfa H1 sorunu** — H1 "Semih" + "Karakaş" iki ayrı span, arada boşluk yok → arama motoru "SemihKarakaş" okuyor. Span'ler arasına `{" "}` veya `sr-only` boşluk ekle.
-5. **Ortam değişkeni yönetimi** — `messages/[id]/reply/route.ts` modül seviyesinde `new Resend()` çağırıyor; `RESEND_API_KEY` olmadan build patlıyor. Lazy init'e çevir (handler içine taşı).
+1. ✅ **Deploy edildi** — GitHub'a (Semihkrks/skarakas) push, Vercel auto-deploy. Canlıda doğrulandı: robots.txt / sitemap.xml / llms.txt / og-image / favicon hepsi 200.
+2. ⏳ **Google Search Console** — TEK KALAN MANUEL İŞ. Hesap gerektirdiği için senin yapman lazım: [search.google.com/search-console](https://search.google.com/search-console) → skarakas.com ekle → sitemap.xml gönder. Aynısını [Bing Webmaster Tools](https://www.bing.com/webmasters) için (ChatGPT web araması Bing index kullanıyor).
+3. ✅ **Blog listesi düzeltildi** — hardcoded dizi kaldırıldı, `/blog` artık Supabase'den server-side çekiyor. Kategoriler dinamik.
+4. ✅ **H1 boşluk düzeltildi** — "Semih Karakaş" artık doğru okunuyor.
+5. ✅ **Resend lazy init** — `contact` ve `reply` route'ları handler içinde init ediyor; build artık RESEND_API_KEY istemiyor.
+6. ✅ **Portfolyo siteleri GEO'ya eklendi** — ustakur.com, nassevent.com, netvora.tr, sonvera.com.tr, kavzakimya.com, cataloglugeziturizm.com.tr → Person schema `workExample` + llms.txt.
 
 ## 📋 Orta Vadeli Öneriler
 
