@@ -178,7 +178,7 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             Semih
-          </motion.span>
+          </motion.span>{" "}
           <motion.span
             className="block text-gradient"
             initial={{ opacity: 0, y: 60, filter: "blur(10px)" }}

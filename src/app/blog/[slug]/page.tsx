@@ -11,14 +11,30 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const supabase = await createClient();
   const { data: post } = await supabase
     .from("blog_posts")
-    .select("title, excerpt")
+    .select("title, excerpt, created_at")
     .eq("slug", slug)
     .single();
 
-  if (!post) return { title: "Yazı Bulunamadı" };
+  if (!post) return { title: "Yazı Bulunamadı", robots: { index: false } };
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt,
+      url: `https://skarakas.com/blog/${slug}`,
+      publishedTime: post.created_at,
+      authors: ["Semih Karakaş"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+    },
   };
 }
 
@@ -47,8 +63,29 @@ export default async function BlogPostPage({ params }: { params: Params }) {
     );
   }
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.created_at,
+    inLanguage: "tr-TR",
+    url: `https://skarakas.com/blog/${post.slug}`,
+    mainEntityOfPage: `https://skarakas.com/blog/${post.slug}`,
+    author: {
+      "@type": "Person",
+      "@id": "https://skarakas.com/#person",
+      name: "Semih Karakaş",
+      url: "https://skarakas.com",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <Navbar />
       <main className="min-h-screen pt-24">
         <BlogPostContent post={{

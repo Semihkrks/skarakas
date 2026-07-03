@@ -3,8 +3,6 @@ import { auth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 type Params = { params: Promise<{ id: string }> };
 
 function buildReplyEmailHTML(recipientName: string, originalMessage: string, replyText: string): string {
@@ -58,6 +56,7 @@ export async function POST(req: NextRequest, { params }: Params) {
     // Send reply email via Resend
     if (process.env.RESEND_API_KEY && !process.env.RESEND_API_KEY.includes("YOUR_API_KEY")) {
       try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
           from: "skarakas.com <onboarding@resend.dev>",
           to: message.email,

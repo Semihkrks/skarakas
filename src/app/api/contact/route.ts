@@ -3,8 +3,6 @@ import { z } from "zod/v4";
 import { createClient } from "@/lib/supabase/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const contactSchema = z.object({
   name: z.string().min(2, "İsim en az 2 karakter olmalı"),
   email: z.email("Geçerli bir e-posta adresi girin"),
@@ -44,6 +42,7 @@ export async function POST(req: NextRequest) {
     const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
     if (process.env.RESEND_API_KEY && !process.env.RESEND_API_KEY.includes("YOUR_API_KEY")) {
       try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
           from: "skarakas.com <onboarding@resend.dev>",
           to: adminEmail || "smhhkrks@gmail.com",

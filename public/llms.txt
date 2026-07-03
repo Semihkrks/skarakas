@@ -1,0 +1,32 @@
+# skarakas.com
+
+> Semih Karakaş — Full-Stack Yazılım Geliştirici. Modern web teknolojileri (React, Next.js, TypeScript, Node.js, Supabase) ile yüksek performanslı, kullanıcı deneyimi odaklı dijital ürünler tasarlar ve geliştirir.
+
+Site dili: Türkçe. Konum: Türkiye.
+
+## Ana Sayfalar
+
+- [Ana Sayfa](https://skarakas.com/): Hakkımda, hizmetler, projeler ve iletişim bölümleri
+- [Blog](https://skarakas.com/blog): Yazılım geliştirme, tasarım ve teknoloji yazıları
+
+## Hizmetler
+
+- Full-stack web uygulaması geliştirme (React, Next.js, TypeScript)
+- UI/UX odaklı arayüz tasarımı ve geliştirme
+- Backend ve veritabanı çözümleri (Node.js, Supabase, PostgreSQL)
+- Performans optimizasyonu ve modern web mimarileri
+
+## Referans Projeler (geliştirdiği siteler)
+
+- [Ustakur](https://ustakur.com)
+- [Nass Event](https://nassevent.com)
+- [Netvora](https://netvora.tr)
+- [Sonvera](https://sonvera.com.tr)
+- [Kavza Kimya](https://kavzakimya.com)
+- [Çataloğlu Gezi Turizm](https://cataloglugeziturizm.com.tr)
+
+## İletişim
+
+- E-posta: semih@skarakas.com
+- GitHub: https://github.com/ssemihkarakass
+- LinkedIn: https://linkedin.com/in/skarakas

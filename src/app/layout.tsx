@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Semih Karakaş" }],
   creator: "Semih Karakaş",
   metadataBase: new URL("https://skarakas.com"),
+  alternates: {
+    canonical: "./",
+  },
   openGraph: {
     type: "website",
     locale: "tr_TR",
@@ -63,6 +66,44 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://skarakas.com/#person",
+      name: "Semih Karakaş",
+      url: "https://skarakas.com",
+      image: "https://skarakas.com/logo.png",
+      jobTitle: "Full-Stack Yazılım Geliştirici",
+      email: "mailto:semih@skarakas.com",
+      knowsAbout: ["React", "Next.js", "TypeScript", "Node.js", "Supabase", "Web Geliştirme"],
+      workExample: [
+        { "@type": "WebSite", name: "Ustakur", url: "https://ustakur.com" },
+        { "@type": "WebSite", name: "Nass Event", url: "https://nassevent.com" },
+        { "@type": "WebSite", name: "Netvora", url: "https://netvora.tr" },
+        { "@type": "WebSite", name: "Sonvera", url: "https://sonvera.com.tr" },
+        { "@type": "WebSite", name: "Kavza Kimya", url: "https://kavzakimya.com" },
+        { "@type": "WebSite", name: "Cataloglu Gezi Turizm", url: "https://cataloglugeziturizm.com.tr" },
+      ],
+      sameAs: [
+        "https://github.com/ssemihkarakass",
+        "https://instagram.com/ssemihkarakass",
+        "https://linkedin.com/in/skarakas",
+        "https://twitter.com/skarakas",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skarakas.com/#website",
+      name: "skarakas.com",
+      url: "https://skarakas.com",
+      inLanguage: "tr-TR",
+      publisher: { "@id": "https://skarakas.com/#person" },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -73,6 +114,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Providers>{children}</Providers>
       </body>
     </html>

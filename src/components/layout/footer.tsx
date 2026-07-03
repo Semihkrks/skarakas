@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, Twitter, Mail, ArrowUp, Heart, Instagram } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/ssemihkarakass", label: "GitHub" },
@@ -46,8 +47,14 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl  bg-gradient-to-br from-primary-500 to-accent-500 font-bold text-white text-sm">
-                SK
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white ring-1 ring-[var(--border)]">
+                <Image
+                  src="/logo.png"
+                  alt="Semih Karakaş — SK logo"
+                  width={28}
+                  height={23}
+                  className="object-contain"
+                />
               </div>
               <span className="text-xl font-bold">
                 <span className="text-gradient">skarakas</span>

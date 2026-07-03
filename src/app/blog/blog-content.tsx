@@ -7,76 +7,26 @@ import { SpotlightCard } from "@/components/animations/tilt-card";
 import { Calendar, Clock, ArrowRight, BookOpen, Search } from "lucide-react";
 import Link from "next/link";
 
-const allPosts = [
-  {
-    id: 1,
-    slug: "nextjs-15-yenilikleri",
-    title: "Next.js 15 ile Gelen Yenilikler ve Performans İyileştirmeleri",
-    excerpt: "Next.js 15, React Server Components, Turbopack ve yeni caching stratejileri ile web geliştirmeyi bir üst seviyeye taşıyor.",
-    category: "Web Geliştirme",
-    date: "2026-02-10",
-    readingTime: "8 dk",
-    gradient: "from-teal-500 to-cyan-500",
-  },
-  {
-    id: 2,
-    slug: "typescript-best-practices",
-    title: "TypeScript Best Practices: Temiz ve Güvenli Kod Yazma Rehberi",
-    excerpt: "Type-safe kod yazmanın incelikleri, generic yapılar, utility types ve real-world pattern'ler hakkında kapsamlı bir rehber.",
-    category: "TypeScript",
-    date: "2026-01-28",
-    readingTime: "12 dk",
-    gradient: "from-blue-500 to-indigo-500",
-  },
-  {
-    id: 3,
-    slug: "supabase-vs-firebase",
-    title: "Supabase vs Firebase: Hangisi Projeniz İçin Daha Uygun?",
-    excerpt: "İki popüler BaaS platformunu performans, fiyatlandırma, özellikler ve geliştirici deneyimi açısından karşılaştırıyoruz.",
-    category: "Backend",
-    date: "2026-01-15",
-    readingTime: "10 dk",
-    gradient: "from-emerald-500 to-teal-500",
-  },
-  {
-    id: 4,
-    slug: "framer-motion-animasyonlari",
-    title: "Framer Motion ile Profesyonel Web Animasyonları",
-    excerpt: "React projelerinize hayat veren etkileyici animasyonlar, scroll-triggered efektler ve micro-interaction'lar nasıl yapılır?",
-    category: "Web Geliştirme",
-    date: "2026-01-05",
-    readingTime: "15 dk",
-    gradient: "from-purple-500 to-pink-500",
-  },
-  {
-    id: 5,
-    slug: "tailwind-css-tips",
-    title: "Tailwind CSS İpuçları: Daha Hızlı ve Temiz Stil Yazımı",
-    excerpt: "Component pattern'leri, custom plugin'ler, responsive tasarım stratejileri ve performans optimizasyonu hakkında pratik ipuçları.",
-    category: "CSS",
-    date: "2025-12-20",
-    readingTime: "7 dk",
-    gradient: "from-sky-500 to-blue-500",
-  },
-  {
-    id: 6,
-    slug: "docker-deployment-rehberi",
-    title: "Docker ile Modern Web Uygulamalarını Deploy Etme Rehberi",
-    excerpt: "Containerization, multi-stage build, docker-compose ve CI/CD pipeline entegrasyonu ile production-ready deployment.",
-    category: "DevOps",
-    date: "2025-12-10",
-    readingTime: "18 dk",
-    gradient: "from-cyan-500 to-teal-500",
-  },
-];
+export interface BlogListPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  created_at: string;
+  reading_time: string;
+  gradient: string | null;
+}
 
-const categories = ["Tümü", "Web Geliştirme", "TypeScript", "Backend", "CSS", "DevOps"];
+const FALLBACK_GRADIENT = "from-teal-500 to-cyan-500";
 
-export function BlogPageContent() {
+export function BlogPageContent({ posts }: { posts: BlogListPost[] }) {
   const [activeCategory, setActiveCategory] = useState("Tümü");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filtered = allPosts.filter((post) => {
+  const categories = ["Tümü", ...Array.from(new Set(posts.map((p) => p.category).filter(Boolean)))];
+
+  const filtered = posts.filter((post) => {
     const matchesCategory = activeCategory === "Tümü" || post.category === activeCategory;
     const matchesSearch =
       !searchQuery ||
@@ -142,7 +92,7 @@ export function BlogPageContent() {
               <SpotlightCard className="h-full">
                 <Link href={`/blog/${post.slug}`} className="block h-full">
                   <article className="glass-card group h-full overflow-hidden rounded-2xl transition-all">
-                    <div className={`relative h-48 w-full bg-gradient-to-br ${post.gradient}`}>
+                    <div className={`relative h-48 w-full bg-gradient-to-br ${post.gradient || FALLBACK_GRADIENT}`}>
                       <div className="absolute inset-0 flex items-center justify-center">
                         <BookOpen className="h-16 w-16 text-white/20" />
                       </div>
@@ -156,13 +106,13 @@ export function BlogPageContent() {
                       <div className="mb-3 flex items-center gap-4 text-xs text-[var(--muted-foreground)]">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {new Date(post.date).toLocaleDateString("tr-TR", {
+                          {new Date(post.created_at).toLocaleDateString("tr-TR", {
                             year: "numeric", month: "long", day: "numeric",
                           })}
                         </span>
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          {post.readingTime}
+                          {post.reading_time}
                         </span>
                       </div>
                       <h2 className="mb-3 text-lg font-bold leading-snug transition-colors group-hover:text-primary-500 line-clamp-2">
@@ -187,7 +137,9 @@ export function BlogPageContent() {
       {filtered.length === 0 && (
         <div className="py-20 text-center">
           <p className="text-lg text-[var(--muted-foreground)]">
-            Aramanızla eşleşen yazı bulunamadı.
+            {posts.length === 0
+              ? "Henüz yazı yayınlanmadı. Yakında burada!"
+              : "Aramanızla eşleşen yazı bulunamadı."}
           </p>
         </div>
       )}
